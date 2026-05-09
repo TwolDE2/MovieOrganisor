@@ -4,6 +4,8 @@ from Tools.Directories import resolveFilename, SCOPE_PLUGINS
 from os import environ as os_environ
 import gettext
 
+__version__ = "3.99"
+
 
 def localeInit():
 	lang = language.getLanguage()[:2]  # getLanguage returns e.g. "fi_FI" for "language_country"

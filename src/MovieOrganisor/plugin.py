@@ -35,8 +35,6 @@ config.plugins.movieorganisor.repeattype = ConfigSelection(default="hourly", cho
 	("6hour", _("6 Hours"))
 ])
 
-movieorganisorversion = "3.99"
-
 
 def mk_esc(esc_chars):
 	return lambda s: ("").join(["\\" + c if c in esc_chars else c for c in s])
