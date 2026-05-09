@@ -3,24 +3,22 @@
 # Movie Organiser by Grog68
 # Converted for Python 3 only by TwolDe
 
-from . import _, ngettext
+from . import _, ngettext  # noqa F401
 
 import glob
 import os
 from re import sub
-from datetime import date, datetime, timedelta
-from time import localtime, time, strftime, mktime, sleep
+from datetime import datetime, timedelta
+from time import localtime, time, strftime, mktime
 
-from enigma import eTimer, quitMainloop, getDesktop
+from enigma import eTimer
 
 from Components.ActionMap import ActionMap
 from Components.config import config, configfile, ConfigSubsection, ConfigYesNo, ConfigSelection, ConfigClock, getConfigListEntry
 from Components.ConfigList import ConfigListScreen
 from Components.Sources.StaticText import StaticText
 from Plugins.Plugin import PluginDescriptor
-from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
-from Tools.Directories import resolveFilename, SCOPE_CURRENT_PLUGIN, SCOPE_CURRENT_SKIN, SCOPE_METADIR
 
 config.plugins.movieorganisor = ConfigSubsection()
 config.plugins.movieorganisor.mergenew = ConfigYesNo(default=True)
@@ -39,12 +37,14 @@ config.plugins.movieorganisor.repeattype = ConfigSelection(default="hourly", cho
 
 movieorganisorversion = "3.99"
 
+
 def mk_esc(esc_chars):
-	return lambda s: ("").join([ "\\" + c if c in esc_chars else c for c in s ])
+	return lambda s: ("").join(["\\" + c if c in esc_chars else c for c in s])
 
 
 esc = mk_esc('{}[]()<>+*_-!$&#\'." ')
 autoMovieOrganisorTimer = None
+
 
 def capwords(directory):
 	capdirectory = (" ").join(s.capitalize() for s in directory.split())
@@ -67,7 +67,7 @@ def domovieorganisation():
 				os.system("mv %s %s" % (os.path.join(path, esc(names)), os.path.join(path, esc(new_name))))
 				print("[MovieOrganisor] Renames %s" % os.path.join(path, esc(names)))
 				if new_name.endswith('meta'):
-					os.system("sed -i 's/New\:\ //g' "+os.path.join(path, esc(new_name)))
+					os.system(r"sed -i 's/New\:\ //g' " + os.path.join(path, esc(new_name)))
 			except Exception:
 				print("[MovieOrganisor]error renaming %s" % os.path.join(path, esc(names)))
 			names = new_name
@@ -182,11 +182,10 @@ def domovieorganisation():
 	return
 
 
-def MovieOrganisorautostart(reason, session =  None, **kwargs):
+def MovieOrganisorautostart(reason, session=None, **kwargs):
 	"""called with reason=1 to during /sbin/shutdown.sysvinit, with reason=0 at startup?"""
 	global _session
 	global autoMovieOrganisorTimer
-	now = int(time())
 	if reason == 0:
 		print("[MovieOrganisor] AutoStart Enabled")
 		if session is not None:
@@ -230,15 +229,16 @@ class AutoMovieOrganisorTimer:
 		backupclock = config.plugins.movieorganisor.scheduletime.value
 		nowt = time()
 		now = localtime(nowt)
-		return int(mktime((now.tm_year,
-		 now.tm_mon,
-		 now.tm_mday,
-		 backupclock[0],
-		 backupclock[1],
-		 0,
-		 now.tm_wday,
-		 now.tm_yday,
-		 now.tm_isdst)))
+		return int(mktime((
+			now.tm_year,
+			now.tm_mon,
+			now.tm_mday,
+			backupclock[0],
+			backupclock[1],
+			0,
+			now.tm_wday,
+			now.tm_yday,
+			now.tm_isdst)))
 
 	def movieorganisordate(self, atLeast=0):
 		global MovieOrganisorTime
@@ -290,7 +290,6 @@ class AutoMovieOrganisorTimer:
 		self.movieorganisortimer.stop()
 		now = int(time())
 		wake = self.getMovieOrganisorTime()
-		atLeast = 0
 		if wake - now < 60:
 			print("[MovieOrganisor] MovieOrganisor onTimer occured at", strftime("%c", localtime(now)))
 			from Screens.Standby import inStandby
@@ -337,22 +336,20 @@ class MovieOrganisorSetupScreen(Screen, ConfigListScreen):
 	</screen>"""
 
 	def __init__(self, session):
-		global movieupdatecheckurl
 		Screen.__init__(self, session)
 		Screen.setTitle(self, _("Movie Organisor Setup (Final version)"))
-		timenow = time()
 		self["key_red"] = StaticText(_("Cancel"))
 		self["key_green"] = StaticText(_("Save"))
 		self["key_yellow"] = StaticText(_("Run now"))
 		self["key_blue"] = StaticText(_(""))
 		self["sig"] = StaticText(_("Plugin by grog68"))
 		self["actions"] = ActionMap(["SetupActions", "ColorActions", "MenuActions"], {
-			"ok": self.keyGo, 
-			"save": self.keyGo, 
-			"cancel": self.keyCancel, 
-			"green": self.keyGo, 
-			"red": self.keyCancel, 
-			"yellow": self.keySaveandGo, 
+			"ok": self.keyGo,
+			"save": self.keyGo,
+			"cancel": self.keyCancel,
+			"green": self.keyGo,
+			"red": self.keyCancel,
+			"yellow": self.keySaveandGo,
 			"blue": self.keyGo,
 			"menu": self.closeRecursive
 		}, -2)
@@ -360,7 +357,6 @@ class MovieOrganisorSetupScreen(Screen, ConfigListScreen):
 		self.list = []
 		ConfigListScreen.__init__(self, self.list, session=self.session, on_change=self.changedEntry)
 		self.createSetup()
-
 
 	def createSetup(self):
 		self.list = []
