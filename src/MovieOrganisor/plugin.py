@@ -14,11 +14,10 @@ from time import localtime, time, strftime, mktime
 from enigma import eTimer
 
 from Components.ActionMap import ActionMap
-from Components.config import config, configfile, ConfigSubsection, ConfigYesNo, ConfigSelection, ConfigClock, getConfigListEntry
-from Components.ConfigList import ConfigListScreen
+from Components.config import config, ConfigSubsection, ConfigYesNo, ConfigSelection, ConfigClock
 from Components.Sources.StaticText import StaticText
 from Plugins.Plugin import PluginDescriptor
-from Screens.Screen import Screen
+from Screens.Setup import Setup
 
 config.plugins.movieorganisor = ConfigSubsection()
 config.plugins.movieorganisor.mergenew = ConfigYesNo(default=True)
@@ -320,83 +319,32 @@ class AutoMovieOrganisorTimer:
 		return
 
 
-class MovieOrganisorSetupScreen(Screen, ConfigListScreen):
-	skin = """
-	<screen position="c-25%,e-75%" size="50%,50%" title="Movie Organsior setup">
-		<widget source="key_red" render="Label" position="12%,e-18%" size="15%,8%" font="Regular;30" foregroundColor="key_text" halign="center" valign="center" backgroundColor="key_red" />
-		<widget source="key_green" render="Label" position="32%,e-18%" size="15%,8%"  font="Regular;30"  foregroundColor="key_text" halign="center" valign="center" backgroundColor="key_green" />
-		<widget source="key_yellow" render="Label" position="52%,e-18%" size="15%,8%"  font="Regular;30"  foregroundColor="key_text" halign="center" valign="center" backgroundColor="key_yellow" />
-		<widget source="key_blue" render="Label" position="72%,e-18%" size="15%,8%"  font="Regular;30"   foregroundColor="key_text" halign="center" valign="center" backgroundColor="key_blue" />
-		<widget name="config" position="c-40%,e-90%" size="80%,50%" font="Regular;25" />
-		<widget name="sig" render="Label" position="10%,e-5%" size="80%,5%" font="Regular;21" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />
-	</screen>"""
-
+class MovieOrganisorSetupScreen(Setup):
 	def __init__(self, session):
-		Screen.__init__(self, session)
-		Screen.setTitle(self, _("Movie Organisor Setup (Final version)"))
-		self["key_red"] = StaticText(_("Cancel"))
-		self["key_green"] = StaticText(_("Save"))
+		Setup.__init__(self, session)
+		self.title = _("Movie Organisor Setup (Final version)") + " - " + _("Plugin by grog68")
 		self["key_yellow"] = StaticText(_("Run now"))
-		self["key_blue"] = StaticText(_(""))
-		self["sig"] = StaticText(_("Plugin by grog68"))
-		self["actions"] = ActionMap(["SetupActions", "ColorActions", "MenuActions"], {
-			"ok": self.keyGo,
-			"save": self.keyGo,
-			"cancel": self.keyCancel,
-			"green": self.keyGo,
-			"red": self.keyCancel,
-			"yellow": self.keySaveandGo,
-			"blue": self.keyGo,
-			"menu": self.closeRecursive
-		}, -2)
-		self.onChangedEntry = []
-		self.list = []
-		ConfigListScreen.__init__(self, self.list, session=self.session, on_change=self.changedEntry)
-		self.createSetup()
+		self["MovieOrganisorActions"] = ActionMap(["ColorActions"], {"yellow": self.keySaveandGo}, -2)
 
 	def createSetup(self):
-		self.list = []
-		self.list.append(getConfigListEntry(_("Enabled"), config.plugins.movieorganisor.schedule))
+		config_list = []
+		config_list.append((_("Enabled"), config.plugins.movieorganisor.schedule))
 		if config.plugins.movieorganisor.schedule.value:
-			self.list.append(getConfigListEntry(_("Path of your recordings folder"), config.plugins.movieorganisor.recordingpath))
-			self.list.append(getConfigListEntry(_("Run every"), config.plugins.movieorganisor.repeattype))
-			self.list.append(getConfigListEntry(_("Remove the text 'New:' from recording names?"), config.plugins.movieorganisor.renamenew))
+			config_list.append((_("Path of your recordings folder"), config.plugins.movieorganisor.recordingpath))
+			config_list.append((_("Run every"), config.plugins.movieorganisor.repeattype))
+			config_list.append((_("Remove the text 'New:' from recording names?"), config.plugins.movieorganisor.renamenew))
 			if not config.plugins.movieorganisor.renamenew.value:
-				self.list.append(getConfigListEntry(_("Keep recordings marked 'New:' separate?"), config.plugins.movieorganisor.mergenew))
-			self.list.append(getConfigListEntry(_("Run while in standby"), config.plugins.movieorganisor.standby))
-		self["config"].list = self.list
-		self["config"].l.setList(self.list)
+				config_list.append((_("Keep recordings marked 'New:' separate?"), config.plugins.movieorganisor.mergenew))
+			config_list.append((_("Run while in standby"), config.plugins.movieorganisor.standby))
+		self["config"].list = config_list
 
-	def changedEntry(self):
-		if self["config"].getCurrent()[0] == _("Enabled"):
-			self.createSetup()
-		if self["config"].getCurrent()[0] == _("Remove the text 'New:' from recording names?"):
-			self.createSetup()
-		for x in self.onChangedEntry:
-			x()
-
-	def keyLeft(self):
-		ConfigListScreen.keyLeft(self)
-
-	def keyRight(self):
-		ConfigListScreen.keyRight(self)
-
-	def keyGo(self):
-		for x in self["config"].list:
-			x[1].save()
-		configfile.save()
+	def keySave(self):
+		self.saveAll()
 		autoMovieOrganisorTimer = AutoMovieOrganisorTimer(self.session)  # noqa F841 # Local variable `autoMovieOrganisorTimer` is assigned to but never used
 		self.close()
 
-	def keyCancel(self):
-		for x in self["config"].list:
-			x[1].cancel()
-		self.close()
-
 	def keySaveandGo(self):
-		for x in self["config"].list:
-			x[1].save()
-		configfile.save()
+		self.saveAll()
 		domovieorganisation()
 		self.close()
 
