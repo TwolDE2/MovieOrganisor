@@ -182,12 +182,10 @@ def domovieorganisation():
 
 def MovieOrganisorautostart(reason, session=None, **kwargs):
 	"""called with reason=1 to during /sbin/shutdown.sysvinit, with reason=0 at startup?"""
-	global _session
 	global autoMovieOrganisorTimer
 	if reason == 0:
 		print("[MovieOrganisor] AutoStart Enabled")
 		if session is not None:
-			_session = session
 			if autoMovieOrganisorTimer is None:
 				autoMovieOrganisorTimer = AutoMovieOrganisorTimer(session)
 	else:
@@ -387,7 +385,7 @@ class MovieOrganisorSetupScreen(Screen, ConfigListScreen):
 		for x in self["config"].list:
 			x[1].save()
 		configfile.save()
-		autoMovieOrganisorTimer = AutoMovieOrganisorTimer(_session)
+		autoMovieOrganisorTimer = AutoMovieOrganisorTimer(self.session)  # noqa F841 # Local variable `autoMovieOrganisorTimer` is assigned to but never used
 		self.close()
 
 	def keyCancel(self):
