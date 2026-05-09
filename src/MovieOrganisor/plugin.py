@@ -1,4 +1,9 @@
-# Movie Organiser by Grog68 with python 3 only commits by me)
+# -*- coding: utf-8 -*-
+
+# Movie Organiser by Grog68
+# Converted for Python 3 only by TwolDe
+
+from . import _, ngettext
 
 import glob
 import os
