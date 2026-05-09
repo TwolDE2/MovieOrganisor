@@ -92,7 +92,7 @@ def domovieorganisation():
 			name1 = names.rsplit(".", 1)[0]
 			filesarray.append(names)
 			seriesname = name1.split(" - ", 2)[1]
-			seriesname = re.sub("S[0-9]* E[0-9]*", "", seriesname)
+			seriesname = sub("S[0-9]* E[0-9]*", "", seriesname)
 			seriesarray.append(seriesname)
 		elif names.endswith(".mp4"):
 			name1 = names.rsplit(".", 1)[0]
@@ -328,15 +328,11 @@ class MovieOrganisorSetupScreen(Screen, ConfigListScreen):
 		<widget source="key_yellow" render="Label" position="52%,e-18%" size="15%,8%"  font="Regular;30"  foregroundColor="key_text" halign="center" valign="center" backgroundColor="key_yellow" />
 		<widget source="key_blue" render="Label" position="72%,e-18%" size="15%,8%"  font="Regular;30"   foregroundColor="key_text" halign="center" valign="center" backgroundColor="key_blue" />
 		<widget name="config" position="c-40%,e-90%" size="80%,50%" font="Regular;25" />
-		<widget name="new_version" render="Label" position="10%,e-45%" size="80%,20%" font="Regular;30" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />
 		<widget name="sig" render="Label" position="10%,e-5%" size="80%,5%" font="Regular;21" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />
 	</screen>"""
 
 	def __init__(self, session):
 		global movieupdatecheckurl
-		global new_version
-		global new_version1
-		global new_version_check
 		Screen.__init__(self, session)
 		Screen.setTitle(self, _("Movie Organisor Setup (Final version)"))
 		timenow = time()
