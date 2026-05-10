@@ -6,15 +6,18 @@ import gettext
 
 __version__ = "3.99"
 
+PluginLanguageDomain = "MovieOrganisor"
+PluginLanguagePath = "Extensions/MovieOrganisor/locale"
+
 
 def localeInit():
 	lang = language.getLanguage()[:2]  # getLanguage returns e.g. "fi_FI" for "language_country"
 	os_environ["LANGUAGE"] = lang  # Enigma doesn't set this (or LC_ALL, LC_MESSAGES, LANG). gettext needs it!
-	gettext.bindtextdomain("MovieOrganisor", resolveFilename(SCOPE_PLUGINS, "Extensions/MovieOrganisor/locale"))
+	gettext.bindtextdomain(PluginLanguageDomain, resolveFilename(SCOPE_PLUGINS, PluginLanguagePath))
 
 
 def _(txt):
-	t = gettext.dgettext("MovieOrganisor", txt)
+	t = gettext.dgettext(PluginLanguageDomain, txt)
 	if t == txt:
 #		print "[MovieOrganisor] fallback to default translation for", txt
 		t = gettext.gettext(txt)
@@ -22,7 +25,7 @@ def _(txt):
 
 
 def ngettext(singular, plural, n):
-	t = gettext.dngettext('MovieOrganisor', singular, plural, n)
+	t = gettext.dngettext(PluginLanguageDomain, singular, plural, n)
 	if t in (singular, plural):
 		t = gettext.ngettext(singular, plural, n)
 	return t

@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Automatically generated, 2026.
 #
-#: ../plugin.py:342
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-09 19:39+0200\n"
+"POT-Creation-Date: 2026-05-10 15:53+0200\n"
 "PO-Revision-Date: 2026-05-09 19:39+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -17,74 +16,66 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../plugin.py:28
+#: ../plugin.py:30
 msgid "15 Minutes"
 msgstr ""
 
-#: ../plugin.py:31
+#: ../plugin.py:33
 msgid "3 Hours"
 msgstr ""
 
-#: ../plugin.py:32
+#: ../plugin.py:34
 msgid "6 Hours"
 msgstr ""
 
-#: ../plugin.py:339
-msgid "Cancel"
-msgstr ""
-
-#: ../plugin.py:362 ../plugin.py:374
+#: ../plugin.py:331
 msgid "Enabled"
 msgstr ""
 
-#: ../plugin.py:29
+#: ../plugin.py:31
 msgid "Half hour"
 msgstr ""
 
-#: ../plugin.py:30
+#: ../plugin.py:32
 msgid "Hourly"
 msgstr ""
 
-#: ../plugin.py:368
+#: ../plugin.py:337
 msgid "Keep recordings marked 'New:' separate?"
 msgstr ""
 
-#: ../plugin.py:412
+#: ../plugin.py:357
 msgid "Movie Organisor"
 msgstr ""
 
-#: ../plugin.py:337
+#: ../plugin.py:325
 msgid "Movie Organisor Setup (Final version)"
 msgstr ""
 
-#: ../plugin.py:412
+#: ../plugin.py:357
 msgid "Organise your series recordings into folders"
 msgstr ""
 
-#: ../plugin.py:364
+#: ../plugin.py:333
 msgid "Path of your recordings folder"
 msgstr ""
 
-#: ../plugin.py:343
+#: ../plugin.py:325
 msgid "Plugin by grog68"
 msgstr ""
 
-#: ../plugin.py:366 ../plugin.py:376
+#: ../plugin.py:335
 msgid "Remove the text 'New:' from recording names?"
 msgstr ""
 
-#: ../plugin.py:365
+#: ../plugin.py:334
 msgid "Run every"
 msgstr ""
 
-#: ../plugin.py:341
+#: ../plugin.py:326
 msgid "Run now"
 msgstr ""
 
-#: ../plugin.py:369
+#: ../plugin.py:338
 msgid "Run while in standby"
-msgstr ""
-
-#: ../plugin.py:340
-msgid "Save"
 msgstr ""
