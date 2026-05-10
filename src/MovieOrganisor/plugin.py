@@ -56,31 +56,30 @@ def domovieorganisation():
 	directories = []
 	for name in recordingnames:
 		seriesname = ""
-		names = os.path.basename(name)
+		basename = os.path.basename(name)
 		if config.plugins.movieorganisor.renamenew.value:
-			new_name = names
-			new_name = new_name.replace("New_ ", "")
+			new_name = sub(r'(^| - )New ', r'\1', basename)
 			try:
-				os.system("mv %s %s" % (os.path.join(path, esc(names)), os.path.join(path, esc(new_name))))
-				print("[MovieOrganisor] Renames %s" % os.path.join(path, esc(names)))
+				os.system("mv %s %s" % (os.path.join(path, esc(basename)), os.path.join(path, esc(new_name))))
+				print("[MovieOrganisor] Renames %s" % os.path.join(path, esc(basename)))
 				if new_name.endswith('meta'):
 					os.system(r"sed -i 's/New\:\ //g' " + os.path.join(path, esc(new_name)))
 			except Exception:
-				print("[MovieOrganisor]error renaming %s" % os.path.join(path, esc(names)))
-			names = new_name
-		capdirectory = capwords(names)
-		if os.path.isdir(os.path.join(path, names)) and names != capdirectory:
+				print("[MovieOrganisor]error renaming %s" % os.path.join(path, esc(basename)))
+			basename = new_name
+		capdirectory = capwords(basename)
+		if os.path.isdir(os.path.join(path, basename)) and basename != capdirectory:
 			try:
-				os.rename(os.path.join(path, names), os.path.join(path, capdirectory))
-				print("[MovieOrganisor] Renames %s" % os.path.join(path, names))
+				os.rename(os.path.join(path, basename), os.path.join(path, capdirectory))
+				print("[MovieOrganisor] Renames %s" % os.path.join(path, basename))
 			except Exception:
-				print("[MovieOrganisor] error renaming %s" % os.path.join(path, names))
+				print("[MovieOrganisor] error renaming %s" % os.path.join(path, basename))
 
 		if os.path.isdir(os.path.join(path, capdirectory)):
 			directories.append(capdirectory)
-		elif names.endswith(".ts"):
-			name1 = names.rsplit(".", 1)[0]
-			filesarray.append(names)
+		elif basename.endswith(".ts"):
+			name1 = basename.rsplit(".", 1)[0]
+			filesarray.append(basename)
 			seriesname = name1.split(" - ", 2)[(-1)]
 			if not config.plugins.movieorganisor.mergenew.value:
 				seriesname = seriesname.replace("New_ ", "")
@@ -90,15 +89,15 @@ def domovieorganisation():
 			elif "_" in seriesname:
 				seriesname = seriesname.rsplit("_", 1)[0]
 			seriesarray.append(seriesname)
-		elif names.endswith(".stream"):
-			name1 = names.rsplit(".", 1)[0]
-			filesarray.append(names)
+		elif basename.endswith(".stream"):
+			name1 = basename.rsplit(".", 1)[0]
+			filesarray.append(basename)
 			seriesname = name1.split(" - ", 2)[1]
 			seriesname = sub("S[0-9]* E[0-9]*", "", seriesname)
 			seriesarray.append(seriesname)
-		elif names.endswith(".mp4"):
-			name1 = names.rsplit(".", 1)[0]
-			filesarray.append(names)
+		elif basename.endswith(".mp4"):
+			name1 = basename.rsplit(".", 1)[0]
+			filesarray.append(basename)
 			seriesname = name1.split("- ", 1)[0]
 			if "_" in seriesname:
 				seriesname = seriesname.rsplit("_", 1)[0]
